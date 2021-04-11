@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Scenes/Controllers/BaseController/BaseController.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Scenes/Controllers/PlayerController/PlayerController.gd" type="Script" id=2]
+[ext_resource path="res://Scenes/UI/FPS/FPS.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Scenes/UI/ActionBar/ActionBar.tscn" type="PackedScene" id=4]
+
+[node name="PlayerController" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+
+[node name="CameraDolly" type="Spatial" parent="." index="0"]
+
+[node name="Camera" type="Camera" parent="CameraDolly" index="0"]
+transform = Transform( 1, 0, 0, 0, 0.906308, 0.422618, 0, -0.422618, 0.906308, 0, 0.5, 0.8 )
+doppler_tracking = 1
+current = true
+
+[node name="UI" type="CanvasLayer" parent="." index="1"]
+
+[node name="ActionBar" parent="UI" index="0" instance=ExtResource( 4 )]
+
+[node name="FPS" parent="UI" index="1" instance=ExtResource( 3 )]

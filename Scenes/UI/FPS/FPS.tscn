@@ -1,0 +1,41 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Scenes/UI/FPS/FPS.gd" type="Script" id=1]
+
+
+[node name="FPS" type="Control"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -1024.0
+margin_bottom = 600.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="FPSLabel" type="Label" parent="."]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -63.0
+margin_top = 10.0
+margin_right = -33.0
+margin_bottom = 24.0
+custom_colors/font_color = Color( 0.988235, 0.0352941, 0.0352941, 1 )
+text = "FPS:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="FPSNumber" type="Label" parent="."]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -46.0
+margin_top = 10.0
+margin_right = -13.0
+margin_bottom = 24.0
+custom_colors/font_color = Color( 0.988235, 0.0352941, 0.0352941, 1 )
+text = "60"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}

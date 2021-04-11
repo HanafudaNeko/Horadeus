@@ -1,0 +1,84 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Scenes/UI/ActionBar/ActionBar.gd" type="Script" id=1]
+[ext_resource path="res://Scenes/UI/ActionBar/ActionButton.tscn" type="PackedScene" id=2]
+
+[node name="ActionBar" type="Control"]
+anchor_left = 0.5
+anchor_top = 0.905
+anchor_right = 0.5
+anchor_bottom = 0.905
+margin_left = -166.0
+margin_top = -26.0
+margin_right = 166.0
+margin_bottom = 26.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Background" type="Panel" parent="."]
+anchor_left = 0.0572289
+anchor_top = 0.0384615
+anchor_right = 0.942771
+anchor_bottom = 0.961538
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="GridContainer" type="GridContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+columns = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ActionButton1" parent="GridContainer" instance=ExtResource( 2 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 52.0
+margin_bottom = 52.0
+action_number = 1
+
+[node name="ActionButton2" parent="GridContainer" instance=ExtResource( 2 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 56.0
+margin_right = 108.0
+margin_bottom = 52.0
+action_number = 2
+
+[node name="ActionButton3" parent="GridContainer" instance=ExtResource( 2 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 112.0
+margin_right = 164.0
+margin_bottom = 52.0
+action_number = 3
+
+[node name="ActionButton4" parent="GridContainer" instance=ExtResource( 2 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 168.0
+margin_right = 220.0
+margin_bottom = 52.0
+action_number = 4
+
+[node name="ActionButton5" parent="GridContainer" instance=ExtResource( 2 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 224.0
+margin_right = 276.0
+margin_bottom = 52.0
+action_number = 5
+
+[node name="ActionButton6" parent="GridContainer" instance=ExtResource( 2 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 280.0
+margin_right = 332.0
+margin_bottom = 52.0
+action_number = 6
