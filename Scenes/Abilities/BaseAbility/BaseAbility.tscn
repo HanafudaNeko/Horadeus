@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Scenes/Abilities/BaseAbility/BaseAbility.gd" type="Script" id=1]
+[ext_resource path="res://Scenes/Abilities/BaseAbility/thumbnail_missing.png" type="Texture" id=2]
+
+[node name="BaseAbility" type="Spatial"]
+script = ExtResource( 1 )
+thumbnail = ExtResource( 2 )
