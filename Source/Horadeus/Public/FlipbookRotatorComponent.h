@@ -4,17 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "FlipbookRotator.generated.h"
+#include "FlipbookRotatorComponent.generated.h"
 
 
 // Forward Declarations
 class UCameraComponent;
-class ACameraActor;
 class UPaperFlipbookComponent;
 
 
 UENUM()
-enum FlipbookRotationMode
+enum FlipbookRotatorMode
 {
 	BillboardWithEase	UMETA(DisplayName = "Billboard with Ease"),
 	Billboard			UMETA(DisplayName = "Y Billboard"),
@@ -25,13 +24,13 @@ enum FlipbookRotationMode
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class HORADEUS_API UFlipbookRotator : public UActorComponent
+class HORADEUS_API UFlipbookRotatorComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
-	UFlipbookRotator();
+	UFlipbookRotatorComponent();
 
 protected:
 	// Called when the game starts
@@ -41,22 +40,23 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	void SetActiveCameraComponent(ACameraActor* NewActiveCameraComponent);
+	UFUNCTION(BlueprintCallable)
+	static void SetActiveCameraComponent(UCameraComponent* NewActiveCameraComponent);
 
-		
+	UFUNCTION(BlueprintCallable)
+	float GetDegreesBetweenActiveCameraAndFlipbook() const;
+
 private:
-	// The camera that all SpriteRotator components will use to calculate rotation
-	UPROPERTY(EditAnywhere)
-		ACameraActor* ActiveCameraComponent;
+	// The camera that all UFlipbookRotatorComponent will use to calculate rotation
+	static UCameraComponent* ActiveCameraComponent;
 
-	UPROPERTY(EditAnywhere)
-		TEnumAsByte<FlipbookRotationMode> RotationMode = BillboardWithEase;
-
+	float DegreesBetweenActiveCameraAndFlipbook = 0.0f;
 	UPaperFlipbookComponent* MyFlipbook = nullptr;
 
-	float TrueDegrees = 0.0f;
+	UPROPERTY(EditAnywhere)
+	TEnumAsByte<FlipbookRotatorMode> RotatorMode = BillboardWithEase;
 
-
-	float GetRotationDegrees();
-	void AttemptToSetActiveCameraComponent();
+	float CalculateDegreesBetweenActiveCameraAndFlipbook() const;
+	float TransformDegreesToRotatorModeSpace(float Degrees) const;
+	void SetFlipbook();
 };
