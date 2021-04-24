@@ -2,13 +2,12 @@
 
 
 #include "FlipbookRotatorComponent.h"
-#include "Camera/CameraComponent.h"
 #include "PaperFlipbookComponent.h"
 
 #define FLIPBOOK_Z_ROTATION_OFFSET -90.0f
 
 
-UCameraComponent* UFlipbookRotatorComponent::ActiveCameraComponent = nullptr;
+UPrimitiveComponent* UFlipbookRotatorComponent::TrackedComponent = nullptr;
 
 
 // Sets default values for this component's properties
@@ -16,15 +15,6 @@ UFlipbookRotatorComponent::UFlipbookRotatorComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 }
-
-
-// Called when the game starts
-void UFlipbookRotatorComponent::BeginPlay()
-{
-	Super::BeginPlay();
-	SetFlipbook();
-}
-
 
 // Called every frame
 void UFlipbookRotatorComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -35,9 +25,9 @@ void UFlipbookRotatorComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 	MyFlipbook->SetRelativeRotation(FRotator(0.0f, TransformDegreesToRotatorModeSpace(DegreesBetweenActiveCameraAndFlipbook) + FLIPBOOK_Z_ROTATION_OFFSET, 0.0f));
 }
 
-void UFlipbookRotatorComponent::SetActiveCameraComponent(UCameraComponent* NewActiveCameraComponent)
+void UFlipbookRotatorComponent::SetTrackedComponent(UPrimitiveComponent* NewTrackedComponent)
 {
-	UFlipbookRotatorComponent::ActiveCameraComponent = NewActiveCameraComponent;
+	UFlipbookRotatorComponent::TrackedComponent = NewTrackedComponent;
 }
 
 float UFlipbookRotatorComponent::GetDegreesBetweenActiveCameraAndFlipbook() const
@@ -45,14 +35,21 @@ float UFlipbookRotatorComponent::GetDegreesBetweenActiveCameraAndFlipbook() cons
 	return DegreesBetweenActiveCameraAndFlipbook;
 }
 
+// Called when the game starts
+void UFlipbookRotatorComponent::BeginPlay()
+{
+	Super::BeginPlay();
+	SetFlipbook();
+}
+
 float UFlipbookRotatorComponent::CalculateDegreesBetweenActiveCameraAndFlipbook() const
 {
-	if (ActiveCameraComponent == nullptr)
+	if (TrackedComponent == nullptr)
 	{
 		return 0.0f;
 	}
 
-	FVector CameraWorldPosition = ActiveCameraComponent->GetOwner()->GetActorLocation();
+	FVector CameraWorldPosition = TrackedComponent->GetOwner()->GetActorLocation();
 	FVector OwnerWorldPosition = GetOwner()->GetActorLocation();
 
 	FVector CameraToOwnerLocal = GetOwner()->GetActorTransform().InverseTransformVector(CameraWorldPosition - OwnerWorldPosition);

@@ -8,7 +8,7 @@
 
 
 // Forward Declarations
-class UCameraComponent;
+class UPrimitiveComponent;
 class UPaperFlipbookComponent;
 
 
@@ -23,34 +23,35 @@ enum FlipbookRotatorMode
 };
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class HORADEUS_API UFlipbookRotatorComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
+public:
 	// Sets default values for this component's properties
 	UFlipbookRotatorComponent();
+
+	// Called every frame
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+	UFUNCTION(BlueprintCallable)
+	static void SetTrackedComponent(UPrimitiveComponent* NewTrackedComponent);
+
+	UFUNCTION(BlueprintCallable)
+	float GetDegreesBetweenActiveCameraAndFlipbook() const;
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
-	UFUNCTION(BlueprintCallable)
-	static void SetActiveCameraComponent(UCameraComponent* NewActiveCameraComponent);
-
-	UFUNCTION(BlueprintCallable)
-	float GetDegreesBetweenActiveCameraAndFlipbook() const;
-
 private:
-	// The camera that all UFlipbookRotatorComponent will use to calculate rotation
-	static UCameraComponent* ActiveCameraComponent;
+	// The component that all UFlipbookRotatorComponent will use to calculate rotation
+	static UPrimitiveComponent* TrackedComponent;
 
 	float DegreesBetweenActiveCameraAndFlipbook = 0.0f;
+
+	UPROPERTY()
 	UPaperFlipbookComponent* MyFlipbook = nullptr;
 
 	UPROPERTY(EditAnywhere)
