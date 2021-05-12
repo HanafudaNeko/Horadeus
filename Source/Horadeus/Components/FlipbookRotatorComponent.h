@@ -54,7 +54,7 @@ private:
 	UPROPERTY()
 	UPaperFlipbookComponent* MyFlipbook = nullptr;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	TEnumAsByte<FlipbookRotatorMode> RotatorMode = BillboardWithEase;
 
 	float CalculateDegreesBetweenActiveCameraAndFlipbook() const;

@@ -16,18 +16,19 @@ AFlipbookPawn::AFlipbookPawn()
 
 	CapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComponent")); 
 	CapsuleComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Block);
+	CapsuleComponent->SetCapsuleHalfHeight(100.0f);
+	CapsuleComponent->SetCapsuleRadius(60.0f);
 	RootComponent = CapsuleComponent;
 
 	PaperFlipbook = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("PaperFlipbook"));
 	PaperFlipbook->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
+	PaperFlipbook->SetRelativeScale3D(FVector(7.0f));
 	PaperFlipbook->SetCastShadow(true);
 	PaperFlipbook->SetupAttachment(RootComponent);
 
 	FacingArrow = CreateDefaultSubobject<UArrowComponent>(TEXT("FacingArrow"));
 	FacingArrow->SetArrowColor(FColor::Purple);
-	FacingArrow->ArrowSize = 0.3;
 	FacingArrow->SetupAttachment(RootComponent);
-
 
 	FlipbookRotator = CreateDefaultSubobject<UFlipbookRotatorComponent>(TEXT("FlipbookRotator"));
 }
