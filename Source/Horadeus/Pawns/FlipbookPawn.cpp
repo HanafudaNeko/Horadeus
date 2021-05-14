@@ -5,6 +5,7 @@
 #include "Components/CapsuleComponent.h"
 #include "PaperFlipbookComponent.h"
 #include "Components/ArrowComponent.h"
+#include "AbilitySystemComponent.h"
 #include "../Components/FlipbookRotatorComponent.h"
 
 
@@ -16,8 +17,7 @@ AFlipbookPawn::AFlipbookPawn()
 
 	CapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComponent")); 
 	CapsuleComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Block);
-	CapsuleComponent->SetCapsuleHalfHeight(100.0f);
-	CapsuleComponent->SetCapsuleRadius(60.0f);
+	CapsuleComponent->InitCapsuleSize(60.0f, 100.0f);
 	RootComponent = CapsuleComponent;
 
 	PaperFlipbook = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("PaperFlipbook"));
@@ -29,6 +29,8 @@ AFlipbookPawn::AFlipbookPawn()
 	FacingArrow = CreateDefaultSubobject<UArrowComponent>(TEXT("FacingArrow"));
 	FacingArrow->SetArrowColor(FColor::Purple);
 	FacingArrow->SetupAttachment(RootComponent);
+
+	AbilitySystem = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystem"));
 
 	FlipbookRotator = CreateDefaultSubobject<UFlipbookRotatorComponent>(TEXT("FlipbookRotator"));
 }

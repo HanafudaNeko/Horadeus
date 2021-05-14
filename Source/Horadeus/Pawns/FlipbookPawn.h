@@ -10,8 +10,10 @@
 // Forward Declarations
 class UCapsuleComponent;
 class UPaperFlipbookComponent;
-class UFlipbookRotatorComponent;
 class UArrowComponent;
+class UAbilitySystemComponent;
+class UFlipbookRotatorComponent;
+
 
 UCLASS()
 class HORADEUS_API AFlipbookPawn : public APawn
@@ -39,6 +41,8 @@ private:
 	UPaperFlipbookComponent* PaperFlipbook = nullptr;
 	UPROPERTY()
 	UArrowComponent* FacingArrow = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UAbilitySystemComponent* AbilitySystem = nullptr;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UFlipbookRotatorComponent* FlipbookRotator = nullptr;
 };
