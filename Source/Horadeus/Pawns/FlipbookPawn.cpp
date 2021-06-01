@@ -6,7 +6,8 @@
 #include "PaperFlipbookComponent.h"
 #include "Components/ArrowComponent.h"
 #include "AbilitySystemComponent.h"
-#include "../Components/FlipbookRotatorComponent.h"
+#include "Horadeus/AttributeSets/BaseAttributeSet.h"
+#include "Horadeus/Components/FlipbookRotatorComponent.h"
 
 
 // Sets default values
@@ -39,14 +40,23 @@ AFlipbookPawn::AFlipbookPawn()
 void AFlipbookPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	
 }
 
 // Called to bind functionality to input
 void AFlipbookPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+}
 
+float AFlipbookPawn::GetHealth() const
+{
+	return IsValid(AttributeSet) ? AttributeSet->GetHealth() : 0.0f;
+}
+
+float AFlipbookPawn::GetMaxHealth() const
+{
+	return IsValid(AttributeSet) ? AttributeSet->GetMaxHealth() : 0.0f;
 }
 
 // Called when the game starts or when spawned
@@ -54,4 +64,8 @@ void AFlipbookPawn::BeginPlay()
 {
 	Super::BeginPlay();
 
+	if (IsValid(AbilitySystem))
+	{
+		AttributeSet = AbilitySystem->GetSet<UBaseAttributeSet>();
+	}
 }
