@@ -36,7 +36,7 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION(BlueprintCallable)
-	static void SetTrackedComponent(UPrimitiveComponent* NewTrackedComponent);
+	static void SetTrackedComponent(USceneComponent* NewTrackedComponent);
 
 	UFUNCTION(BlueprintCallable)
 	float GetDegreesBetweenActiveCameraAndFlipbook() const;
@@ -47,7 +47,7 @@ protected:
 
 private:
 	// The component that all UFlipbookRotatorComponent will use to calculate rotation
-	static UPrimitiveComponent* TrackedComponent;
+	static USceneComponent* TrackedComponent;
 
 	float DegreesBetweenActiveCameraAndFlipbook = 0.0f;
 

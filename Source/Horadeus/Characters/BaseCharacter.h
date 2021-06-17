@@ -3,32 +3,28 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Pawn.h"
+#include "PaperCharacter.h"
 #include "AbilitySystemInterface.h"
 #include <GameplayEffectTypes.h>
-#include "FlipbookPawn.generated.h"
+#include "BaseCharacter.generated.h"
 
 
 UCLASS()
-class HORADEUS_API AFlipbookPawn : public APawn, public IAbilitySystemInterface
+class HORADEUS_API ABaseCharacter : public APaperCharacter, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
-
+	
 public:
-	// Sets default values for this pawn's properties
-	AFlipbookPawn();
+	ABaseCharacter();
 
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void OnRep_PlayerState() override;
 
-	virtual class UAbilitySystemComponent* GetAbilitySystemComponent() const override;
-
+	virtual class UAbilitySystemComponent* GetAbilitySystemComponent() const override { return AbilitySystem; };
+	class UCameraComponent* GetCameraComponent() const { return CameraComponent; }
+	class USpringArmComponent* GetSpringArmComponent() const { return SpringArmComponent; }
 
 	UFUNCTION(BlueprintPure, Category = "Attributes")
 	float GetHealth() const;
@@ -40,23 +36,25 @@ public:
 	float GetStamina() const;
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	void MoveRight(float Val);
+	void MoveForward(float Val);
+	void Turn(float Val);
+	void LookUp(float Val);
 
 private:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	class UCapsuleComponent* CapsuleComponent = nullptr;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	class UPaperFlipbookComponent* PaperFlipbook = nullptr;
-	UPROPERTY()
-	class UArrowComponent* FacingArrow = nullptr;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	class UCameraComponent* CameraComponent;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	class USpringArmComponent* SpringArmComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Paper2D", meta = (AllowPrivateAccess = "true"))
 	class UFlipbookRotatorComponent* FlipbookRotator = nullptr;
+
+	// Ability system
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	class UHoradeusAbilitySystemComponent* AbilitySystem = nullptr;
+	class UAbilitySystemComponent* AbilitySystem = nullptr;
 	UPROPERTY()
 	class UBaseAttributeSet* AttributeSet = nullptr;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities", meta = (AllowPrivateAccess = "true"))
 	TArray<TSubclassOf<class UBaseGameplayAbility>> DefaultAbilities;
 
