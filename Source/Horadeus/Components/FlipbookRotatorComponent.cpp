@@ -7,7 +7,7 @@
 #define FLIPBOOK_Z_ROTATION_OFFSET -90.0f
 
 
-UPrimitiveComponent* UFlipbookRotatorComponent::TrackedComponent = nullptr;
+USceneComponent* UFlipbookRotatorComponent::TrackedComponent = nullptr;
 
 
 // Sets default values for this component's properties
@@ -25,7 +25,7 @@ void UFlipbookRotatorComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 	MyFlipbook->SetRelativeRotation(FRotator(0.0f, TransformDegreesToRotatorModeSpace(DegreesBetweenActiveCameraAndFlipbook) + FLIPBOOK_Z_ROTATION_OFFSET, 0.0f));
 }
 
-void UFlipbookRotatorComponent::SetTrackedComponent(UPrimitiveComponent* NewTrackedComponent)
+void UFlipbookRotatorComponent::SetTrackedComponent(USceneComponent* NewTrackedComponent)
 {
 	UFlipbookRotatorComponent::TrackedComponent = NewTrackedComponent;
 }
@@ -49,7 +49,7 @@ float UFlipbookRotatorComponent::CalculateDegreesBetweenActiveCameraAndFlipbook(
 		return 0.0f;
 	}
 
-	FVector CameraWorldPosition = TrackedComponent->GetOwner()->GetActorLocation();
+	FVector CameraWorldPosition = TrackedComponent->GetComponentLocation();
 	FVector OwnerWorldPosition = GetOwner()->GetActorLocation();
 
 	FVector CameraToOwnerLocal = GetOwner()->GetActorTransform().InverseTransformVector(CameraWorldPosition - OwnerWorldPosition);

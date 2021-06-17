@@ -5,8 +5,9 @@
 #include "Components/CapsuleComponent.h"
 #include "PaperFlipbookComponent.h"
 #include "Components/ArrowComponent.h"
-#include "AbilitySystemComponent.h"
+#include "Horadeus/Components/HoradeusAbilitySystemComponent.h"
 #include "Horadeus/AttributeSets/BaseAttributeSet.h"
+#include "Horadeus/Abilities/BaseGameplayAbility.h"
 #include "Horadeus/Components/FlipbookRotatorComponent.h"
 
 
@@ -31,7 +32,11 @@ AFlipbookPawn::AFlipbookPawn()
 	FacingArrow->SetArrowColor(FColor::Purple);
 	FacingArrow->SetupAttachment(RootComponent);
 
-	AbilitySystem = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystem"));
+	AbilitySystem = CreateDefaultSubobject<UHoradeusAbilitySystemComponent>(TEXT("AbilitySystem"));
+	AbilitySystem->SetIsReplicated(true);
+	AbilitySystem->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
+
+	AttributeSet = CreateDefaultSubobject<UBaseAttributeSet>(TEXT("Attributes"));
 
 	FlipbookRotator = CreateDefaultSubobject<UFlipbookRotatorComponent>(TEXT("FlipbookRotator"));
 }
@@ -47,6 +52,39 @@ void AFlipbookPawn::Tick(float DeltaTime)
 void AFlipbookPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+	if (AbilitySystem && InputComponent)
+	{
+		const FGameplayAbilityInputBinds Binds("Confirm", "Cancel", "EAbilityInoutID", static_cast<int32>(EAbilityInputID::Confirm), static_cast<int32>(EAbilityInputID::Cancel));
+		AbilitySystem->BindAbilityActivationToInputComponent(InputComponent, Binds);
+	}
+}
+
+void AFlipbookPawn::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	// Server GAS init
+	AbilitySystem->InitAbilityActorInfo(this, this);
+	GiveDefaultAbilities();
+}
+
+void AFlipbookPawn::OnRep_PlayerState()
+{
+	Super::OnRep_PlayerState();
+
+	// Client GAS init
+	AbilitySystem->InitAbilityActorInfo(this, this);
+	if (AbilitySystem && InputComponent)
+	{
+		const FGameplayAbilityInputBinds Binds("Confirm", "Cancel", "EAbilityInoutID", static_cast<int32>(EAbilityInputID::Confirm), static_cast<int32>(EAbilityInputID::Cancel));
+		AbilitySystem->BindAbilityActivationToInputComponent(InputComponent, Binds);
+	}
+}
+
+UAbilitySystemComponent* AFlipbookPawn::GetAbilitySystemComponent() const
+{
+	return AbilitySystem;
 }
 
 float AFlipbookPawn::GetHealth() const
@@ -59,13 +97,29 @@ float AFlipbookPawn::GetMaxHealth() const
 	return IsValid(AttributeSet) ? AttributeSet->GetMaxHealth() : 0.0f;
 }
 
+float AFlipbookPawn::GetStamina() const
+{
+	return IsValid(AttributeSet) ? AttributeSet->GetStamina() : 0.0f;
+}
+
 // Called when the game starts or when spawned
 void AFlipbookPawn::BeginPlay()
 {
 	Super::BeginPlay();
+}
 
-	if (IsValid(AbilitySystem))
+void AFlipbookPawn::GiveDefaultAbilities()
+{
+	if (HasAuthority() && IsValid(AbilitySystem))
 	{
-		AttributeSet = AbilitySystem->GetSet<UBaseAttributeSet>();
+		for (auto Ability : DefaultAbilities)
+		{
+			AbilitySystem->GiveAbility(FGameplayAbilitySpec(
+				Ability,
+				1, 
+				static_cast<int32>(Ability.GetDefaultObject()->AbilityInputID),
+				this
+			));
+		}
 	}
 }

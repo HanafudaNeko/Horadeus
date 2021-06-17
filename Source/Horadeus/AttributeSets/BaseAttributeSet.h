@@ -7,28 +7,50 @@
 #include "AbilitySystemComponent.h"
 #include "BaseAttributeSet.generated.h"
 
-/**
- * 
- */
+#define ATTRIBUTE_ACCESSORS(ClassName, PropertyName) \
+     GAMEPLAYATTRIBUTE_PROPERTY_GETTER(ClassName, PropertyName) \
+     GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
+     GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
+     GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
+
 UCLASS()
 class HORADEUS_API UBaseAttributeSet : public UAttributeSet
 {
 	GENERATED_BODY()
 public:
+	UBaseAttributeSet();
 
-	void PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data) override;
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	virtual void PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data) override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character")
+
+	// Attributes
+
+	UPROPERTY(BlueprintReadOnly, Category = "Attributes", ReplicatedUsing = OnRep_Health)
 	FGameplayAttributeData Health;
-	GAMEPLAYATTRIBUTE_VALUE_GETTER(Health)
-	GAMEPLAYATTRIBUTE_VALUE_SETTER(Health)
-	GAMEPLAYATTRIBUTE_VALUE_INITTER(Health)
-	GAMEPLAYATTRIBUTE_PROPERTY_GETTER(UBaseAttributeSet, Health)
+	ATTRIBUTE_ACCESSORS(UBaseAttributeSet, Health)
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character")
+	UPROPERTY(BlueprintReadOnly, Category = "Attributes", ReplicatedUsing = OnRep_MaxHealth)
 	FGameplayAttributeData MaxHealth;
-	GAMEPLAYATTRIBUTE_VALUE_GETTER(MaxHealth)
-	GAMEPLAYATTRIBUTE_VALUE_SETTER(MaxHealth)
-	GAMEPLAYATTRIBUTE_VALUE_INITTER(MaxHealth)
-	GAMEPLAYATTRIBUTE_PROPERTY_GETTER(UBaseAttributeSet, MaxHealth)
+	ATTRIBUTE_ACCESSORS(UBaseAttributeSet, MaxHealth)
+
+
+	UPROPERTY(BlueprintReadOnly, Category = "Attributes", ReplicatedUsing = OnRep_Stamnia)
+	FGameplayAttributeData Stamina;
+	ATTRIBUTE_ACCESSORS(UBaseAttributeSet, Stamina)
+
+
+	// OnReps
+
+	UFUNCTION()
+	virtual void OnRep_Health(const FGameplayAttributeData& OldHealth)
+	{ GAMEPLAYATTRIBUTE_REPNOTIFY(UBaseAttributeSet, Health, OldHealth); };
+
+	UFUNCTION()
+	virtual void OnRep_MaxHealth(const FGameplayAttributeData& OldMaxHealth)
+	{ GAMEPLAYATTRIBUTE_REPNOTIFY(UBaseAttributeSet, MaxHealth, OldMaxHealth); };
+
+	UFUNCTION()
+	virtual void OnRep_Stamnia(const FGameplayAttributeData& OldStamina)
+	{ GAMEPLAYATTRIBUTE_REPNOTIFY(UBaseAttributeSet, Stamina, OldStamina); }
 };
