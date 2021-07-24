@@ -16,7 +16,13 @@ class HORADEUS_API ABaseCharacter : public APaperCharacter, public IAbilitySyste
 	
 public:
 	ABaseCharacter();
-
+	
+	
+	// Called every frame
+	virtual void Tick( float DeltaSeconds ) override;
+	// signed by JGS_Discord
+	
+	
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	virtual void PossessedBy(AController* NewController) override;
@@ -31,6 +37,11 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "Attributes")
 	float GetMaxHealth() const;
+	
+	// Initualize Set Max Health 
+	UFUNCTION(BlueprintPure, Category = "Attributes")
+	float SetMaxHealth() const;
+	// Signed by JGS_Discord
 
 	UFUNCTION(BlueprintPure, Category = "Attributes")
 	float GetStamina() const;
