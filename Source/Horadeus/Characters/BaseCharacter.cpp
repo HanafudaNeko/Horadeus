@@ -88,6 +88,23 @@ void ABaseCharacter::OnRep_PlayerState()
 	}
 }
 
+
+/* // Called every frame. Will look for damage to player here. As well as other uses..
+void ACntrls::Tick( float DeltaTime )
+{
+	Super::Tick( DeltaTime );
+        // Call your functions
+	if ()
+	{
+	
+	}
+        // Signd by JGS_Discord
+
+}
+// Signed by JGS_Discord
+*/
+
+
 float ABaseCharacter::GetHealth() const
 {
 	return IsValid(AttributeSet) ? AttributeSet->GetHealth() : 0.0f;
@@ -97,6 +114,14 @@ float ABaseCharacter::GetMaxHealth() const
 {
 	return IsValid(AttributeSet) ? AttributeSet->GetMaxHealth() : 0.0f;
 }
+
+// Set Max Health 
+float ABaseCharacter::GetMaxHealth() const
+{
+	return IsValid(AttributeSet) ? AttributeSet->SetMaxHealth() : 3.0f;
+	
+}
+// Signed by JGS_Discord
 
 float ABaseCharacter::GetStamina() const
 {
